@@ -1,0 +1,10 @@
+#root {
+  width: 100%;
+}
+
+.container {
+  color: white;
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px;
+}
