@@ -1,26 +1,29 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import Editor, { Monaco } from "@monaco-editor/react";
-import type { editor } from "monaco-editor";
+// import Editor, { Monaco } from "@monaco-editor/react";
+// import type { editor } from "monaco-editor";
+import { CodeBlock } from "./components/CodeBlock";
 
 function App() {
-    const [code, setCode] = useState<string | undefined>(`<p class="bg-red-500">Test Html from Dynamic</p>`);
-    const [result, setResult] = useState<string | undefined>("");
+    const [code, setCode] = useState<string>(`<p class="bg-red-500">Test Html from Dynamic</p>`);
+    const [result, setResult] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const handleEditorDidMount = useCallback((_: editor.IStandaloneCodeEditor, monaco: Monaco): void => {
-        monaco.editor.defineTheme("my-theme", {
-            base: "vs-dark",
-            inherit: true,
-            rules: [],
-            colors: {
-                "editor.background": "#171717",
-            },
-        });
+    // const handleEditorDidMount = useCallback((_: editor.IStandaloneCodeEditor, monaco: Monaco): void => {
+    //     monaco.editor.defineTheme("my-theme", {
+    //         base: "vs-dark",
+    //         inherit: true,
+    //         rules: [],
+    //         colors: {
+    //             "editor.background": "#171717",
+    //         },
+    //     });
 
-        monaco.editor.setTheme("my-theme");
-    }, []);
+    //     monaco.editor.setTheme("my-theme");
+    // }, []);
 
     const handleConvert = async () => {
+        setLoading(true);
         const response = await fetch(`${import.meta.env.VITE_API}/api`, {
             method: "POST",
             headers: {
@@ -30,6 +33,7 @@ function App() {
         });
         const data = await response.text();
         setResult(data);
+        setLoading(false);
     };
 
     return (
@@ -39,19 +43,27 @@ function App() {
             </div>
             <div className="container">
                 <div style={{ width: "50%" }}>
-                    <Editor
+                    <CodeBlock
+                        code={code}
+                        editable={!loading}
+                        onChange={(value) => {
+                            setCode(value);
+                        }}
+                    />
+                    {/* <Editor
                         height="80vh"
                         value={code}
                         onMount={handleEditorDidMount}
                         onChange={(value) => setCode(value)}
                         options={{ readOnly: false }}
-                    />
+                    /> */}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <button onClick={handleConvert}>Convert</button>
                 </div>
                 <div style={{ width: "50%" }}>
-                    <Editor height="80vh" value={result} onMount={handleEditorDidMount} options={{ readOnly: false }} />
+                    {/* <Editor height="80vh" value={result} onMount={handleEditorDidMount} options={{ readOnly: false }} /> */}
+                    <CodeBlock code={result} editable={!loading} />
                 </div>
             </div>
         </React.Fragment>
