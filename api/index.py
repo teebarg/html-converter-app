@@ -43,6 +43,8 @@ def convert_html_to_jsx(element):
             attr = 'className'
         elif attr == 'for':
             attr = 'htmlFor'
+        elif attr == 'viewbox':
+            attr = 'viewBox'
         else:
             attr = camel_case(attr)
 
