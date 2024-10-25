@@ -37,7 +37,7 @@ def convert_html_to_jsx(element):
 
     attributes = []
     for attr, value in element.attrs.items():
-        if attr in ["data-slot", "data-in-range", "data-orientation", "aria-label", "aria-labelledby", "aria-describedby", "aria-hidden", "aria-expanded"]:
+        if attr in ["data-slot", "data-in-range", "data-orientation", "aria-label", "aria-labelledby", "aria-describedby", "aria-hidden", "aria-expanded", "aria-invalid", "aria-required", "aria-disabled"]:
             attr = attr
         elif attr == 'class':
             attr = 'className'
